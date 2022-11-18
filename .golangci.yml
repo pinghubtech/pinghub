@@ -1,0 +1,48 @@
+run:
+  concurrency: 4
+  timeout: 5m
+
+skip-dirs:
+  - dist
+  - migrations
+  - template
+  - vendor
+
+linters-settings:
+  maligned:
+    suggest-new: true
+  forbidigo:
+    forbid:
+      - ^print.*$
+      - 'fmt\.Print.*'
+  depguard:
+    list-type: blacklist
+    include-go-root: false
+    packages:
+      - github.com/uber-go/zap
+      - github.com/rs/zerolog
+      - github.com/pkg/errors
+    packages-with-error-message:
+      - github.com/uber-go/zap: "logging is allowed only by logrus"
+      - github.com/rs/zerolog: "logging is allowed only by logrus"
+
+linters:
+  disable-all: true
+  enable:
+    - goimports
+    - gocritic
+    - misspell
+    - govet
+    - ineffassign
+    - unconvert
+    - gofmt
+    - gosimple
+    - depguard
+    - staticcheck
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - dogsled
+    - durationcheck
+    - forbidigo

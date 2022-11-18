@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Status</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>{{ .TargetName }}</h1>
+    <div>
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <a href="?target={{ .TargetName }}&period=week"
+               class="btn btn-primary {{ if eq .Period "week"}} active {{ end }}">Week</a>
+            <a href="?target={{ .TargetName }}&period=day"
+               class="btn btn-primary {{ if eq .Period "day"}} active {{ end }}">Day</a>
+            <a href="?target={{ .TargetName }}"
+               class="btn btn-primary {{ if eq .Period "hour"}} active {{ end }}">Hour</a>
+        </div>
+    </div>
+    <div id="responseTime"></div>
+</div>
+<script>
+
+    google.charts.load('current', {packages: ['corechart', 'line']});
+    google.charts.setOnLoadCallback(drawCrosshairs);
+
+    function drawCrosshairs() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('datetime', 'dateTime');
+        data.addColumn('number', 'responseTime');
+
+        data.addRows([
+            {{ range .Items }}
+            [new Date({{ .RTime }}),{{ .DurationMs }}],
+            {{ end }}
+        ]);
+
+        var options = {
+            hAxis: {
+                title: 'Date and time'
+            },
+            vAxis: {
+                title: 'Response time'
+            },
+            colors: ['#a52714', '#097138'],
+            crosshair: {
+                color: '#000',
+                trigger: 'selection'
+            }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('responseTime'));
+
+        chart.draw(data, options);
+        chart.setSelection([{row: 38, column: 1}]);
+
+    }
+</script>
+</body>
+</html>

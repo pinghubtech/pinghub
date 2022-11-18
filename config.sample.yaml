@@ -1,0 +1,11 @@
+targets:
+
+  - id: "antgubarev-1"
+    name: antgubarev blog
+    url: "https://antgubarev.me"
+    request_type: GET
+
+  - id: "github-1"
+    name: github
+    url: "https://github.com"
+    request_type: GET
